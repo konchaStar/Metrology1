@@ -1,0 +1,76 @@
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+    "strings"
+)
+
+type TodoItem struct {
+    id   int
+    text string
+}
+
+type TodoList struct {
+    items      []TodoItem
+    nextItemId int
+}
+
+func (list *TodoList) addItem(text string) {
+    item := TodoItem{id: list.nextItemId, text: text}
+    list.items = append(list.items, item)
+    list.nextItemId++
+}
+
+func (list *TodoList) removeItem(itemId int) bool {
+    for i, item := range list.items {
+        if item.id == itemId {
+            list.items = append(list.items[:i], list.items[i+1:]...)
+            return true
+        }
+    }
+    return false
+}
+
+func (list *TodoList) printItems() {
+    for _, item := range list.items {
+        fmt.Printf("%d. %s\n", item.id, item.text)
+    }
+}
+
+func main() {
+    list := TodoList{}
+
+    for {
+        fmt.Print("> ")
+        reader := bufio.NewReader(os.Stdin)
+        input, _ := reader.ReadString('\n')
+        input = strings.TrimSpace(input)
+
+        if input == "quit" {
+            break
+        }
+
+        parts := strings.Split(input, " ")
+
+        switch parts[0] {
+        case "add":
+            if len(parts) > 1 {
+                list.addItem(strings.Join(parts[1:], " "))
+            }
+        case "remove":
+            if len(parts) > 1 {
+                itemId, err := strconv.Atoi(parts[1])
+                if err == nil {
+                    if !list.removeItem(itemId) {
+                        fmt.Println("Item not found")
+                    }
+                }
+            }
+        case "list":
+            list.printItems()
+        }
+    }
+}

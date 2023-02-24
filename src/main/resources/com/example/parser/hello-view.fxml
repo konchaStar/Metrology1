@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="729.0" prefWidth="618.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.parser.ParserController">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="49.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="OpenFileMenu" mnemonicParsing="false" onAction="#onClick" text="Open" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label layoutX="277.0" layoutY="32.0" text="Словарь операторов" />
+      <Label layoutX="282.0" layoutY="138.0" text="Словарь операндов" />
+      <Label layoutX="246.0" layoutY="256.0" prefHeight="17.0" prefWidth="146.0" text="Общее число операторов" />
+      <Label layoutX="252.0" layoutY="295.0" prefHeight="17.0" prefWidth="140.0" text="Общее число операндов" />
+      <Label layoutX="203.0" layoutY="529.0" prefHeight="17.0" prefWidth="189.0" text="Число вхождений j-ого операнда" />
+      <Label layoutX="196.0" layoutY="332.0" prefHeight="17.0" prefWidth="196.0" text="Число вхождений i-ого оператора" />
+      <Label layoutX="14.0" layoutY="36.0" prefHeight="17.0" prefWidth="115.0" text="Словарь программы" />
+      <Label layoutX="14.0" layoutY="66.0" prefHeight="17.0" prefWidth="103.0" text="Длина программы" />
+      <Label layoutX="14.0" layoutY="96.0" prefHeight="17.0" prefWidth="110.0" text="Объем программы" />
+      <TextArea fx:id="OperatorDictInput" editable="false" layoutX="405.0" layoutY="32.0" prefHeight="100.0" prefWidth="200.0" wrapText="true" />
+      <TextArea fx:id="OperandDictInput" editable="false" layoutX="405.0" layoutY="142.0" prefHeight="100.0" prefWidth="200.0" wrapText="true" />
+      <TextField fx:id="OperatorsAmountInput" editable="false" layoutX="405.0" layoutY="253.0" prefHeight="25.0" prefWidth="85.0" />
+      <TextField fx:id="OperandsAmountInput" editable="false" layoutX="405.0" layoutY="291.0" prefHeight="25.0" prefWidth="85.0" />
+      <TextArea fx:id="AmountOfOperatorEntriesInput" editable="false" layoutX="405.0" layoutY="331.0" prefHeight="181.0" prefWidth="200.0" wrapText="true" />
+      <TextField fx:id="ProgDictInput" editable="false" layoutX="142.0" layoutY="32.0" prefHeight="25.0" prefWidth="85.0" />
+      <TextField fx:id="ProgLengthInput" editable="false" layoutX="142.0" layoutY="62.0" prefHeight="25.0" prefWidth="85.0" />
+      <TextField fx:id="ProgVolumeInput" editable="false" layoutX="142.0" layoutY="92.0" prefHeight="25.0" prefWidth="85.0" />
+      <TextArea fx:id="AmountOfOperandEntriesInput" editable="false" layoutX="405.0" layoutY="529.0" prefHeight="181.0" prefWidth="200.0" wrapText="true" />
+   </children>
+</Pane>
