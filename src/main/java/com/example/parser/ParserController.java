@@ -14,11 +14,12 @@ import java.util.*;
 
 public class ParserController {
     private ArrayList<String> golangOperators = new ArrayList<>(List.of(
-            "+", "-", "/", "*", "%", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!", "&", "|", "^", ",", ";", "(",
+            "+", "++", "--", "-", "/", "*", "%", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!", "&", "|", "^", ",", ";", "(",
             ".", "len", "&", ">>=", "<<=", "^=", "|=", "&=", "%=", "/=", "*=", "-=", "+=", ":=", "=", ">>", "<<", "~",
             "break", "case", "chan", "const", "continue", "default", "defer", "else", "fallthrough", "for", "func",
             "go", "goto", "if", "import", "interface", "map", "package", "range", "return", "select", "struct", "switch",
             "type", "var"));
+    private ArrayList<String> operands = new ArrayList<>();
     @FXML
     private TextArea AmountOfOperandEntriesInput;
 
@@ -58,6 +59,10 @@ public class ParserController {
             while (reader.ready()){
                 parseString(reader.readLine());
             }
+            reader = new BufferedReader(new FileReader(file));
+            while(reader.ready()){
+                parseOperands(reader.readLine());
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -68,17 +73,54 @@ public class ParserController {
         parseOperators(line);
     }
     private void parseOperands(String line){
-
+        String newLine;
+        for(String operand : operandsEntries.keySet()){
+            while(line.contains(operand)){
+                newLine = "";
+                newLine += line.substring(0, line.indexOf(operand));
+                newLine += line.substring(line.indexOf(operand) + operand.length(), line.length());
+                line = newLine;
+                operandsEntries.replace(operand, operandsEntries.get(operand) + 1);
+            }
+        }
+    }
+    private void addOperand(String line, String operator){
+        String operand = "";
+        if(operator.equals(":=")){
+            int i = 0;
+            while(!line.split(" ")[i].equals(":=")){
+                i++;
+            }
+            operand = line.split(" ")[i - 1];
+        } else {
+            int i = 0;
+            while(!line.split(" ")[i].equals("var")){
+                i++;
+            }
+            operand = line.split(" ")[i + 1];
+        }
+        operandsEntries.put(operand, 0);
     }
     private void parseOperators(String line){
-        line = " " + line + " ";
         String newLine;
-        for(String operator : golangOperators){
+        for(int i = 0; i < golangOperators.size(); i++){
+            String operator = golangOperators.get(i);
             while(line.contains(operator)){
+                if(operator.equals(":=") || operator.equals("var")){
+                    addOperand(line, operator);
+                }
+                if(operator.equals("func")){
+                    int index = 0;
+                    while(!line.split(" ")[index].equals("func")){
+                        index++;
+                    }
+                    golangOperators.add(line.split(" ")[index + 1].substring(0, line.split(" ")[index + 1].indexOf("(")));
+                }
                 newLine = "";
                 newLine += line.substring(0, line.indexOf(operator));
-                newLine += line.substring(line.indexOf(operator) + 1, line.length());
+                newLine += line.substring(line.indexOf(operator) + operator.length(), line.length());
                 line = newLine;
+
                 if (operatorsEntries.get(operator) != null) {
                     operatorsEntries.replace(operator, operatorsEntries.get(operator) + 1);
                 } else {
@@ -105,12 +147,14 @@ public class ParserController {
             operatorsBuilder.append(key + "\n");
         }
         for(String key : operandsEntries.keySet()){
-            operandsEntriesBuilder.append(key + "\t" + operandsEntries.get(key));
+            operandsEntriesBuilder.append(key + "\t" + operandsEntries.get(key) + "\n");
             operandsAmount += operandsEntries.get(key);
             operandsBuilder.append(key + "\n");
         }
         AmountOfOperatorEntriesInput.setText(operatorsEntriesBuilder.toString());
         OperatorDictInput.setText(operatorsBuilder.toString());
+        AmountOfOperandEntriesInput.setText(operandsEntriesBuilder.toString());
+        OperandDictInput.setText(operandsBuilder.toString());
         OperatorsAmountInput.setText(String.valueOf(operatorsAmount));
         ProgDictInput.setText(String.valueOf(operandsEntries.size() + operatorsEntries.size()));
         ProgLengthInput.setText(String.valueOf(operandsAmount + operatorsAmount));
